@@ -42,8 +42,11 @@ module Quality ( Quality, newQ, capacityQ, delayQ )
 data Quality = Qua String Int Float deriving (Eq, Show)
 
 newQ :: String -> Int -> Float -> Quality
+newQ calidad capacidad delay = Qua calidad capacidad delay
 capacityQ :: Quality -> Int -- cuantos túneles puede tolerar esta conexión
+capacityQ (newQ _ capacidad _) = capacidad 
 delayQ :: Quality -> Float  -- la demora por unidad de distancia que sucede en las conexiones de este canal
+delayQ (newQ _ _ delay)
 -------------------
 module Link ( Link, newL, linksL, connectsL, capacityL, delayL )
    where
@@ -51,19 +54,27 @@ module Link ( Link, newL, linksL, connectsL, capacityL, delayL )
 data Link = Lin City City Quality deriving (Eq, Show)
 
 newL :: City -> City -> Quality -> Link -- genera un link entre dos ciudades distintas
+newL ciudad_1 ciudad_2 cable = Lin ciudad_1 ciudad_2 cable
 connectsL :: City -> Link -> Bool   -- indica si esta ciudad es parte de este link
+connectsL ciudad_a_verificar (Lin ciudad_1 ciudad_2 _) | ciudad_a_verificar == ciudad_1 = True
+    | ciudad_a_verificar == ciudad_2 = True
+    | otherwise = False
 linksL :: City -> City -> Link -> Bool -- indica si estas dos ciudades distintas estan conectadas mediante este link
-capacityL :: Link -> Int
+linksL ciudad_a_verificar_1 ciudad_a_verificar_2 (Lin ciudad_1 ciudad_2 cable) = connectsL ciudad_a_verificar_1 (Lin ciudad_1 ciudad_2 cable) && connectsL ciudad_a_verificar_2 (Lin ciudad_1 ciudad_2 cable)
+capacityL :: Link -> Int 
+capacityL (Lin _ _ cable) = capacityQ cable
 delayL :: Link -> Float     -- la demora que sufre una conexion en este canal
+delayL (Lin _ _ cable) = delayQ cable
 -------------------
-module Tunel ( Tunel, newT, connectsT, usesT, delayT )
-   where
-
-data Tunel = Tun [Link] deriving (Eq, Show)
-
 newT :: [Link] -> Tunel
+newT (x:xs) = Tun (x:xs)
 connectsT :: City -> City -> Tunel -> Bool -- inidca si este tunel conceta estas dos ciudades distintas
+connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun (x:xs)) | linksL ciudad_a_verificar_1 ciudad_a_verificar_2 x = True
+    | connectsL ciudad_a_verificar_1 x = connectsT ciudad_a_verificar_2 ciudad_a_verificar_2 (Tun xs)
+    | connectsL ciudad_a_verificar_2 x = connectsT ciudad_a_verificar_1 ciudad_a_verificar_1 (Tun xs)
+    | otherwise = connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun xs)
 usesT :: Link -> Tunel -> Bool  -- indica si este tunel atraviesa ese link
+usesT link tunel = 
 delayT :: Tunel -> Float -- la demora que sufre una conexion en este tunel
 -------------------
 module Region ( Region, newR, foundR, linkR, tunelR, pathR, linksForR, connectedR, linkedR, delayR, availableCapacityForR, usedCapacityForR )
