@@ -1,7 +1,7 @@
-module Tunel ( Tunel, newT, connectsT)-- usesT, delayT )
+module Tunel ( Tunel, newT, connectsT, usesT, delayT)
    where
 
-import City 
+import City
 import Point 
 import Quality 
 import Link
@@ -15,8 +15,13 @@ connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun (x:xs)) | linksL ciudad
     | connectsL ciudad_a_verificar_1 x = connectsT ciudad_a_verificar_2 ciudad_a_verificar_2 (Tun xs)
     | connectsL ciudad_a_verificar_2 x = connectsT ciudad_a_verificar_1 ciudad_a_verificar_1 (Tun xs)
     | otherwise = connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun xs)
---usesT :: Link -> Tunel -> Bool  -- indica si este tunel atraviesa ese link 
---delayT :: Tunel -> Float -- la demora que sufre una conexion en este tunel
+usesT :: Link -> Tunel -> Bool  -- indica si este tunel atraviesa ese link 
+usesT _ (Tun []) = False
+usesT link (Tun (x:xs)) | link == x = True
+    | otherwise = usesT link (Tun xs)
+delayT :: Tunel -> Float -- la demora que sufre una conexion en este tunel
+delayT (Tun []) = 0
+delayT (Tun (x:xs)) = delayL x + delayT (Tun xs)
 
 madrid_location = newP 200 400
 madrid = newC "madrid" madrid_location
@@ -32,5 +37,9 @@ link_3 = newL londres barcelona cable_titanio
 
 barcelona_location = newP 100 200
 barcelona = newC "barcelona" barcelona_location
+
+cable_cobre = newQ "Cobre" 8 0.01
+
+link_4 = newL madrid barcelona cable_cobre
 
 tunel_1 = newT [link_1,link_2,link_3]
