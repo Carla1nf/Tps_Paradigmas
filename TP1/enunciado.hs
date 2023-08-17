@@ -73,15 +73,20 @@ connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun (x:xs)) | linksL ciudad
     | connectsL ciudad_a_verificar_1 x = connectsT ciudad_a_verificar_2 ciudad_a_verificar_2 (Tun xs)
     | connectsL ciudad_a_verificar_2 x = connectsT ciudad_a_verificar_1 ciudad_a_verificar_1 (Tun xs)
     | otherwise = connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun xs)
-usesT :: Link -> Tunel -> Bool  -- indica si este tunel atraviesa ese link
-usesT link tunel = 
+usesT :: Link -> Tunel -> Bool  -- indica si este tunel atraviesa ese link 
+usesT _ (Tun []) = False
+usesT link (Tun (x:xs)) | link == x = True
+    | otherwise = usesT link (Tun xs)
 delayT :: Tunel -> Float -- la demora que sufre una conexion en este tunel
+delayT (Tun []) = 0
+delayT (Tun (x:xs)) = delayL x + delayT (Tun xs)
 -------------------
 module Region ( Region, newR, foundR, linkR, tunelR, pathR, linksForR, connectedR, linkedR, delayR, availableCapacityForR, usedCapacityForR )
    where
 
 data Region = Reg [City] [Link] [Tunel]
 newR :: Region
+newR = Reg [city][link][tunel]
 foundR :: Region -> City -> Region -- agrega una nueva ciudad a la región
 foundR (Reg cities links tunnels) city = Reg (city : cities) links tunnels
 
