@@ -99,10 +99,10 @@ tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciu
 
 
 connectedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan conectadas por un tunel
-connectedR reg ciudad1 ciudad2 = any (connectsT ciudad1) (tunelR reg [ciudad1, ciudad2])
+connectedR (Reg _ _ tunnels) ciudad1 ciudad2 = any (\tunel -> connectsT ciudad1 ciudad2 tunel) tunnels
 
 linkedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan enlazadas
-linkedR reg ciudad1 ciudad2 = any (connectsL ciudad1) (linksFor reg ciudad2)
+linkedR reg ciudad1 ciudad2 = any (\link -> connectsL ciudad1 link || connectsL ciudad2 link) (linksForR reg)
 
 delayR :: Region -> City -> City -> Float -- dadas dos ciudades conectadas, indica la demora
 delayR reg ciudad1 ciudad2 = sum (map delayL (linksFor reg ciudad2))
