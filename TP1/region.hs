@@ -45,25 +45,6 @@ findLinkR (Reg ciudades (link:links) tuneles) ciudad_1 ciudad_2 | linksL ciudad_
 availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
 availableCapacityForR reg ciudad_1 ciudad_2 = capacityL (findLinkR reg ciudad_1 ciudad_2) - capacidadUtilizadaR reg ciudad_1 ciudad_2 0
 
-
-
-
-findLink :: Region -> City -> City -> Link
-findLink (Reg ciudades (link:links) tuneles) ciudad_1 ciudad_2 | linksL ciudad_1 ciudad_2 link = link
-   | otherwise = findLink (Reg ciudades links tuneles) ciudad_1 ciudad_2 
-
-availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
-availableCapacityForR reg ciudad_1 ciudad_2 = capacityL (findLinkR reg ciudad_1 ciudad_2) - capacidadUtilizadaR reg ciudad_1 ciudad_2 0
-
-
-
-
-
-
-
-
-
-
 --delayR reg ciudad1 ciudad2 = sum (map delayL (linksForR reg ciudad1 ciudad2))
 
 -- delayR ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun []) = False
