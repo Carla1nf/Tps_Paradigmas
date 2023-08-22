@@ -5,23 +5,27 @@ import City
 import Point 
 import Quality 
 import Link
+import System.Win32.DebugApi (continueDebugEvent)
 
 data Tunel = Tun [Link] deriving (Eq, Show)
 
 newT :: [Link] -> Tunel
-newT (x:xs) = Tun (x:xs)
+newT = Tun 
 connectsT :: City -> City -> Tunel -> Bool -- inidca si este tunel conceta estas dos ciudades distintas
-connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun (x:xs)) | linksL ciudad_a_verificar_1 ciudad_a_verificar_2 x = True
-    | connectsL ciudad_a_verificar_1 x = connectsT ciudad_a_verificar_2 ciudad_a_verificar_2 (Tun xs)
-    | connectsL ciudad_a_verificar_2 x = connectsT ciudad_a_verificar_1 ciudad_a_verificar_1 (Tun xs)
-    | otherwise = connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun xs)
+connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun []) = False
+--connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun (link:links)) | linksL ciudad_a_verificar_1 ciudad_a_verificar_2 link = True
+--    | connectsL ciudad_a_verificar_1 link = connectsT ciudad_a_verificar_2 ciudad_a_verificar_2 (Tun links)
+--    | connectsL ciudad_a_verificar_2 link = connectsT ciudad_a_verificar_1 ciudad_a_verificar_1 (Tun links)
+--    | otherwise = connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun links)
+connectsT ciudad_1 ciudad_2 (Tun (link:links)) | (connectsL ciudad_1 link || connectsL ciudad_2 link) && (connectsL ciudad_1 (last links) || connectsL ciudad_2 (last links)) = True
+    |otherwise = False
 usesT :: Link -> Tunel -> Bool  -- indica si este tunel atraviesa ese link 
 usesT _ (Tun []) = False
-usesT link (Tun (x:xs)) | link == x = True
-    | otherwise = usesT link (Tun xs)
+usesT link_a_verificar (Tun (link:links)) | link_a_verificar == link = True
+    | otherwise = usesT link_a_verificar (Tun links)
 delayT :: Tunel -> Float -- la demora que sufre una conexion en este tunel
 delayT (Tun []) = 0
-delayT (Tun (x:xs)) = delayL x + delayT (Tun xs)
+delayT (Tun (link:links)) = delayL link + delayT (Tun links)
 
 madrid_location = newP 200 400
 madrid = newC "madrid" madrid_location

@@ -4,7 +4,7 @@ module Point ( Point, newP, difP)
 data Point = Poi Int Int deriving (Eq, Show)
 
 newP :: Int -> Int -> Point
-newP a b = Poi a b
+newP coordenada_x coordenada_y = Poi coordenada_x coordenada_y 
 
 cuadrado :: Int -> Float
 cuadrado x = fromIntegral(x*x)

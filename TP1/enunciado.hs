@@ -86,7 +86,7 @@ module Region ( Region, newR, foundR, linkR, tunelR, pathR, linksForR, connected
 
 data Region = Reg [City] [Link] [Tunel]
 newR :: Region
-newR = Reg [city][link][tunel]
+newR = Reg 
 foundR :: Region -> City -> Region -- agrega una nueva ciudad a la región
 foundR (Reg cities links tunnels) city = Reg (city : cities) links tunnels
 
