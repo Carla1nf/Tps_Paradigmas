@@ -1,4 +1,4 @@
-module Region ( Region, newR, foundR, linkR, tunelR, connectedR, linkedR, delayR) --availableCapacityForR, findLink)
+module Region ( Region, newR, foundR, linkR, tunelR, connectedR, linkedR, delayR,iniciarNuevaRegion) --availableCapacityForR, findLink)
    where
 
 import City 
@@ -7,7 +7,7 @@ import Quality
 import Link
 import Tunel
 
-data Region = Reg [City] [Link] [Tunel]
+data Region = Reg [City] [Link] [Tunel] deriving (Eq, Show)
 newR :: Region
 newR = Reg [] [] []
 
@@ -39,12 +39,22 @@ delayR :: Region -> City -> City -> Float -- dadas dos ciudades conectadas, indi
 delayR (Reg ciudades links (tunel:tuneles)) ciudad_1 ciudad_2 | connectsT ciudad_1 ciudad_2 tunel = delayT tunel
    | otherwise = delayR (Reg ciudades links tuneles) ciudad_1 ciudad_2
 
---availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
---availableCapacityForR (Reg ciudades links tuneles) ciudad_1 ciudad_2 = 
+capacidadUtilizadaR :: Region -> City -> City -> Int -> Int
+capacidadUtilizadaR (Reg ciudades links []) ciudad_1 ciudad_2 capacidad_minima = capacidad_minima
+capacidadUtilizadaR (Reg ciudades links (tunel:tuneles)) ciudad_1 ciudad_2 capacidad_minima | usesT (findLinkR (Reg ciudades links (tunel:tuneles)) ciudad_1 ciudad_2) tunel = capacidadUtilizadaR (Reg ciudades links tuneles) ciudad_1 ciudad_2 (capacidad_minima + 1)
+   |otherwise = capacidadUtilizadaR (Reg ciudades links tuneles) ciudad_1 ciudad_2 capacidad_minima
 
-findLink :: Region -> City -> City -> Link
-findLink (Reg ciudades (link:links) tuneles) ciudad_1 ciudad_2 | linksL ciudad_1 ciudad_2 link = link
-   | otherwise = findLink (Reg ciudades links tuneles) ciudad_1 ciudad_2 
+findLinkR :: Region -> City -> City -> Link 
+findLinkR (Reg _ [] _) _ _ = error "No existe link entre estas dos ciudades"
+findLinkR (Reg ciudades (link:links) tuneles) ciudad_1 ciudad_2 | linksL ciudad_1 ciudad_2 link = link
+   | otherwise = findLinkR (Reg ciudades links tuneles) ciudad_1 ciudad_2 
+
+availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
+availableCapacityForR reg ciudad_1 ciudad_2 = capacityL (findLinkR reg ciudad_1 ciudad_2) - capacidadUtilizadaR reg ciudad_1 ciudad_2 0
+
+
+
+
 
 --findLink / linksL
 --capacityL
@@ -97,7 +107,8 @@ link_4 = newL madrid barcelona cable_cobre
 --stickWith :: [Int] -> Stick
 --stickWith = foldr (flip push) Vacio
 tunel_1 = newT [link_1,link_2,link_3]
-region_1 = iniciarNuevaRegion region [barcelona,madrid,londres] [link_1,link_2,link_3] [tunel_1]
+tunel_2 = newT [link_1,link_2]
+region_1 = iniciarNuevaRegion region [barcelona,madrid,londres] [link_1,link_2,link_3] [tunel_1,tunel_2]
 region = newR
 
 -- initWith :: [Int] -> [Int] -> [Int] -> Hanoi
