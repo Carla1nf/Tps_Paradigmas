@@ -13,6 +13,7 @@ newT :: [Link] -> Tunel
 newT = Tun 
 connectsT :: City -> City -> Tunel -> Bool -- inidca si este tunel conceta estas dos ciudades distintas
 connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun []) = False
+connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun _)| ciudad_a_verificar_1 == ciudad_a_verificar_2 = error "Mismas ciudades como input"
 --connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun (link:links)) | linksL ciudad_a_verificar_1 ciudad_a_verificar_2 link = True
 --    | connectsL ciudad_a_verificar_1 link = connectsT ciudad_a_verificar_2 ciudad_a_verificar_2 (Tun links)
 --    | connectsL ciudad_a_verificar_2 link = connectsT ciudad_a_verificar_1 ciudad_a_verificar_1 (Tun links)

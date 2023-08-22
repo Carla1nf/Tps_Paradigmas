@@ -54,7 +54,9 @@ module Link ( Link, newL, linksL, connectsL, capacityL, delayL )
 data Link = Lin City City Quality deriving (Eq, Show)
 
 newL :: City -> City -> Quality -> Link -- genera un link entre dos ciudades distintas
+newL ciudad_1 ciudad_2 cable | ciudad_1 == ciudad_2 = error "Mismas ciudades como input"
 newL ciudad_1 ciudad_2 cable = Lin ciudad_1 ciudad_2 cable
+
 connectsL :: City -> Link -> Bool   -- indica si esta ciudad es parte de este link
 connectsL ciudad_a_verificar (Lin ciudad_1 ciudad_2 _) | ciudad_a_verificar == ciudad_1 = True
     | ciudad_a_verificar == ciudad_2 = True
