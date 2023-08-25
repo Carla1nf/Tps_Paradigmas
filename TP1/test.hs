@@ -20,6 +20,8 @@ linkR (Reg ciudades links tuneles) ciudad_1 ciudad_2 calidad = Reg ciudades (new
 tunelR :: Region -> [ City ] -> Region -- genera una comunicación entre dos ciudades distintas de la región
 tunelR (Reg ciudades links tuneles) ciudades_a_comunicar = Reg ciudades links (newT links:tuneles)
 
+--cambiar tunelR
+
 connectedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan conectadas por un tunel
 connectedR (Reg _ _ tuneles) ciudad1 ciudad2 = any (connectsT ciudad1 ciudad2) tuneles
 
@@ -31,6 +33,7 @@ connectedR (Reg _ _ tuneles) ciudad1 ciudad2 = any (connectsT ciudad1 ciudad2) t
 linkedR :: Region -> City -> City -> Bool -- indica si estas dos ciudades estan enlazadas
 linkedR (Reg _ [] _ ) _ _ = False
 linkedR (Reg ciudades (link:links) tuneles) ciudad_1 ciudad_2 | linksL ciudad_1 ciudad_2 link = True
+   | connectedR (Reg ciudades (link:links) tuneles) ciudad_1 ciudad_2 = True
    | otherwise = linkedR (Reg ciudades links tuneles) ciudad_1 ciudad_2
 
 --linkedR (Reg ciudades links tuneles) ciudad_1 ciudad_2 = any (\link -> connectsL ciudad_1 link || connectsL ciudad_2 link) tuneles
@@ -51,6 +54,27 @@ findLinkR (Reg ciudades (link:links) tuneles) ciudad_1 ciudad_2 | linksL ciudad_
 
 availableCapacityForR :: Region -> City -> City -> Int -- indica la capacidad disponible entre dos ciudades
 availableCapacityForR reg ciudad_1 ciudad_2 = capacityL (findLinkR reg ciudad_1 ciudad_2) - capacidadUtilizadaR reg ciudad_1 ciudad_2 0
+
+
+-- chequear lo de el primero y ultimo de cada link que hizo emilio en el pizarron
+cabecera a b li
+   a b li | es la Primer a li & es la ultima b li = T
+   | es la primera b li & es la ultima a li = T
+
+es la primer c Ls
+   c [] = False
+   a : [] = connectsL a c
+   c a:b:ls = connectsL a c & not connectsL b c
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -90,25 +114,32 @@ paris_location = newP 1100 (-2100)
 paris = newC "paris" paris_location
 londres_location = newP 4000 2500
 londres = newC "londres" londres_location
+
+napoles_location = newP 4000 2500
+napoles = newC "napoles" napoles_location
+
+buenosAires_location = newP 4000 2500
+buenosAires = newC "buenosAires" buenosAires_location
 cable_titanio = newQ "Titanio" 4 0.1
 link_1 = newL paris madrid cable_titanio
 link_2 = newL madrid barcelona cable_titanio
 
 link_3 = newL barcelona londres cable_titanio
 
+link_4 = newL londres napoles cable_cobre
+link_5 = newL napoles buenosAires cable_cobre
+
 barcelona_location = newP 100 200
 barcelona = newC "barcelona" barcelona_location
 
 cable_cobre = newQ "Cobre" 8 0.01
 
-link_4 = newL madrid barcelona cable_cobre
-
 
 --stickWith :: [Int] -> Stick
 --stickWith = foldr (flip push) Vacio
-tunel_1 = newT [link_1,link_2,link_3]
+tunel_1 = newT [link_1,link_2,link_3,link_4,link_5]
 tunel_2 = newT [link_1,link_2]
-region_1 = iniciarNuevaRegion region [barcelona,madrid,londres] [link_1,link_2,link_3] [tunel_1,tunel_2]
+region_1 = iniciarNuevaRegion region [barcelona,madrid,londres] [link_1,link_2,link_3,link_4,link_5] [tunel_1,tunel_2]
 region = newR
 
 -- initWith :: [Int] -> [Int] -> [Int] -> Hanoi

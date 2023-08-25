@@ -7,7 +7,7 @@ import Quality
 import Link
 import Tunel
 
-data Region = Reg [City] [Link] [Tunel] deriving (Eq, Show)
+data Region = Reg [City] [Link] [Tunel]
 newR :: Region
 newR = Reg [] [] []
 

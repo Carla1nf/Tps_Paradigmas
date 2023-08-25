@@ -9,7 +9,7 @@ import Link
 data Tunel = Tun [Link] deriving (Eq, Show)
 
 newT :: [Link] -> Tunel
-newT = Tun 
+newT links = Tun links
 connectsT :: City -> City -> Tunel -> Bool -- inidca si este tunel conceta estas dos ciudades distintas
 connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun []) = False
 connectsT ciudad_a_verificar_1 ciudad_a_verificar_2 (Tun _)| ciudad_a_verificar_1 == ciudad_a_verificar_2 = error "Mismas ciudades como input"
