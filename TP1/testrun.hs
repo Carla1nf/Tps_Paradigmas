@@ -53,6 +53,7 @@ test = [distanceC madrid barcelona == 223.6068,
         availableCapacityForR regionCreada barcelona madrid == 3,
 
         connectedR regionCreada paris buenosAires == True,
+        connectedR regionCreada madrid buenosAires == False, "Este no deberia ser False? No son 2 puntas del tunel"
 
         delayQ cableTitanio == 0.1,
         delayQ cableCobre == 0.01,
