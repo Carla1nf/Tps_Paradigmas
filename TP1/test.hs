@@ -7,6 +7,7 @@ import Quality
 import Link
 import Tunel
 
+
 data Region = Reg [City] [Link] [Tunel] deriving (Eq, Show)
 newR :: Region
 newR = Reg [] [] []
@@ -153,8 +154,7 @@ region = newR
 -- addTunels (Reg ciudades links []) tuneles_a_agregar = Reg ciudades links  tuneles_a_agregar
 
 
-iniciarNuevaRegion :: Region -> [City] -> [Link] -> [Tunel] -> Region
-iniciarNuevaRegion (Reg [] [] []) = Reg
+
 
 --iniciarNuevaRegion reg (ciudad:ciudades) (link:links) (tunel:tuneles) | (foundR reg ciudad) 
 --   |(link:links) = (linkR reg link) 
