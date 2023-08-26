@@ -35,23 +35,35 @@ t = [foundR region paris,foundR region madrid, foundR region barcelona, foundR r
 get = delayR regionCreada paris madrid
 
 test = [distanceC madrid barcelona == 223.6068,
+
         delayL link_2 == 0.1,
+
         linksL madrid barcelona link_2 == True,
         linksL madrid paris link_2 == False,
+
         findLinkR regionCreada madrid barcelona == link_2,
+
         linkedR regionCreada madrid barcelona == True,
         linkedR regionCreada barcelona madrid == True,
         linkedR regionCreada barcelona paris == False,
+
         capacityL link_2 == 4,
         capacityL link_5 == 8,
+
         availableCapacityForR regionCreada barcelona madrid == 3,
+
         connectedR regionCreada paris buenosAires == True,
+
         delayQ cableTitanio == 0.1,
         delayQ cableCobre == 0.01,
+
         usesT link_2 tunel_4  == True,
         usesT link_1 tunel_4  == False,
+        usesT link_1 tunel_2  == False,
+
         connectsT londres napoles tunel_2 == True,
-        connectsT londres paris tunel_2 == False
+        connectsT londres paris tunel_2 == False,
+        connectsT londres paris tunel_4 == False
 
         ]
 
