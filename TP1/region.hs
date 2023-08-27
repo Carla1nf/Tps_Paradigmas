@@ -1,4 +1,4 @@
-module Region ( Region, newR, foundR, linkR, tunelR, connectedR, linkedR, delayR, availableCapacityForR, iniciarNuevaRegion, findLinkR)
+module Region ( Region, newR, foundR, linkR, tunelR, connectedR, linkedR, delayR, availableCapacityForR)
    where
 
 import City 
@@ -7,7 +7,7 @@ import Quality
 import Link
 import Tunel
 
-data Region = Reg [City] [Link] [Tunel] deriving (Eq,Show)
+data Region = Reg [City] [Link] [Tunel] deriving (Show)
 newR :: Region
 newR = Reg [] [] []
 
