@@ -1,4 +1,4 @@
-module Link ( Link, newL, linksL, connectsL, capacityL, delayL )
+module Link ( Link, newL, linksL, connectsL, capacityL, delayL)
    where
 
 import City 
@@ -21,5 +21,4 @@ capacityL :: Link -> Int
 capacityL (Lin _ _ calidad) = capacityQ calidad
 delayL :: Link -> Float     -- la demora que sufre una conexion en este canal
 delayL (Lin _ _ calidad) = delayQ calidad
-
 
