@@ -1,26 +1,26 @@
 package queue;
 
-public class Queue {
+import java.util.ArrayList;
+import java.util.List;
 
-  public boolean isEmpty() {
-		if this.Queue == [] {
-			return true;
-		}
-		else {
-			return false;
-		}
+public class Queue {
+	
+	public List<Object> queue = new ArrayList<>();
+
+    public boolean isEmpty() {
+		return queue.isEmpty();
 	}
-    
+
 	public Queue add( Object  cargo ) {
-		// TODO Auto-generated method stub
+		this.queue.add(cargo);
 		return this;
 	}
-    
+	
 	public Object take() {
     // TODO Auto-generated method stub
 		return null;
 	}
-    
+
 	public Object head() {
 		// TODO Auto-generated method stub
     return null;
