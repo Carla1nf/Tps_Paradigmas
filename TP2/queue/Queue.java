@@ -22,8 +22,12 @@ public class Queue {
 	}
 
 	public Object head() {
-		// TODO Auto-generated method stub
-    return null;
+		if (this.queue.isEmpty()){
+			return new RuntimeException( "Queue is empty" );
+		}
+		else{
+			return this.queue.get(0);
+		}
 	}
 
 	public int size() {
