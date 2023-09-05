@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Queue {
 	
+	public static String QUEUE_IS_EMPTY = "Queue is empty";
 	public List<Object> queue = new ArrayList<>();
 
     public boolean isEmpty() {
@@ -17,13 +18,17 @@ public class Queue {
 	}
 	
 	public Object take() {
-    // TODO Auto-generated method stub
-		return null;
+		if (this.queue.isEmpty()){
+			return new Error( QUEUE_IS_EMPTY);
+		}
+		Object lastAdded = this.queue.get(lastQueueObject());
+		this.queue.remove(lastQueueObject());
+		return lastAdded;
 	}
 
 	public Object head() {
 		if (this.queue.isEmpty()){
-			return new RuntimeException( "Queue is empty" );
+			return new Error( QUEUE_IS_EMPTY);
 		}
 		else{
 			return this.queue.get(0);
@@ -31,8 +36,10 @@ public class Queue {
 	}
 
 	public int size() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.queue.size();
 	}
 
+	private int lastQueueObject() {
+		return this.queue.size()-1;
+	}
 }
