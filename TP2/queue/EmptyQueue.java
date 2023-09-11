@@ -1,6 +1,7 @@
 package queue;
 
 public class EmptyQueue extends Queue {
+	
 	private static String QUEUE_IS_EMPTY = "Queue is empty";
 	
 	public Queue add (Object cargo) {

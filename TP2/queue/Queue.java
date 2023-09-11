@@ -3,8 +3,8 @@ package queue;
 import java.util.ArrayList;
 
 public class Queue {
+	
 	public ArrayList<Object> queueList = new ArrayList<Object>();
-
     public boolean isEmpty() {return queueList.isEmpty();}
 
 	public Queue add( Object  cargo ) {
@@ -27,7 +27,7 @@ public class Queue {
 	}
 
 	public int size() {
-		return this.queueList.size();
+		return queueList.size();
 	}
 	
 	private Queue queueProtector() {

@@ -8,10 +8,10 @@ public class LoadedQueue extends Queue {
 	}
 	
 	public Object take() {
-		return queueList.remove(0);
+		return null;
 	}
 	
 	public Object head() {
-		return queueList.get(0);
+		return null;
 	}
 }
