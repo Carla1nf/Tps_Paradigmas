@@ -98,6 +98,7 @@ public class QueueTest {
       queue.head();
       fail( "Expected Error was not thrown." );
     } catch (Error e) {
+      assertEquals("Queue is empty",e.getMessage());
       assertTrue( e.getMessage().equals( "Queue is empty" ) );
     }
   }

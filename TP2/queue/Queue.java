@@ -6,30 +6,24 @@ public class Queue {
 	
 	public static String QUEUE_IS_EMPTY = "Queue is empty";
 	public ArrayList<Object> queueList = new ArrayList<Object>();
+	public static Queue queueExtra = new EmptyQueue();
 
-    public boolean isEmpty() {
-		return queueList.isEmpty();
-	}
+    public boolean isEmpty() {return queueList.isEmpty();}
 
 	public Queue add( Object  cargo ) {
+		queueExtra = queueExtra.add(cargo);
 		queueList.add(cargo);
 		return this;
 	}
 	
 	public Object take() {
-		if (this.queueList.isEmpty()){
-			throw new Error(QUEUE_IS_EMPTY);
-		}
-		return this.queueList.remove(0);
+		queueExtra.take();
+		return queueList.remove(0);
 	}
 
 	public Object head() {
-		if (this.queueList.isEmpty()){
-			throw new Error(QUEUE_IS_EMPTY);
-		}
-		else{
-			return this.queueList.get(0);
-		}
+		queueExtra.head();
+		return queueList.get(0);
 	}
 
 	public int size() {
