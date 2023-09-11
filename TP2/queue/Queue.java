@@ -31,8 +31,12 @@ public class Queue {
 	}
 	
 	private Queue queueProtector() {
-		Queue queueNew = new EmptyQueue();
-		for (Object i : queueList) queueNew = queueNew.add(i);
-		return queueNew;
+		final Queue[] queueNew = {new EmptyQueue()};
+		queueList.forEach(item -> {
+		    queueNew[0] = queueNew[0].add(item);
+		});
+
+		return queueNew[0];
+
 	}
 }
