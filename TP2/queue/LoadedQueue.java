@@ -1,6 +1,6 @@
 package queue;
 
-public class FullQueue extends Queue {
+public class LoadedQueue extends Queue {
 	public Queue add (Object cargo) {
 		this.queueList.add(cargo);
 		return this;
