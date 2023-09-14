@@ -1,6 +1,6 @@
 package queue;
 
-public class LoadedQueue extends Queue {
+public class LoadedQueue extends QueueCommander {
 	
 	private Object cargo;
 

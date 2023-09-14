@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Queue {
 	
-	public ArrayList<Object> queueList = new ArrayList<Object>();
+	public ArrayList<QueueCommander> queueList = new ArrayList<QueueCommander>();
 	
     public boolean isEmpty() {
     	return queueList.isEmpty();

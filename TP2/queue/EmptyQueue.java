@@ -1,6 +1,6 @@
 package queue;
 
-public class EmptyQueue extends Queue {
+public class EmptyQueue extends QueueCommander {
 	
 	private static String QUEUE_IS_EMPTY = "Queue is empty";
 	
