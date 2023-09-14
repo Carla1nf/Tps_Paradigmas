@@ -5,27 +5,30 @@ import java.util.ArrayList;
 public class Queue {
 	
 	public ArrayList<QueueCommander> queueList = new ArrayList<QueueCommander>();
+    
+	public Queue() {
+		queueList.add(new EmptyQueue());
+	}
 	
-    public boolean isEmpty() {
-    	return queueList.isEmpty();
-    }
+	public boolean isEmpty() {
+		return queueList.size() == 1;
+	}
 
 	public Queue add( Object  cargo ) {
-		queueList.add(new LoadedQueue(cargo));
+		QueueCommander loadedQueue = new LoadedQueue(cargo);
+		queueList.add(1,loadedQueue);
 		return this;
 	}
 	
 	public Object take() {
-		QueueCommander removeElement = queueList.remove(0);
-		return removeElement.take();
+		return queueList.remove(size()).take();
 	}
 
 	public Object head() {
-		QueueCommander firstElement = queueList.get(0);
-		return firstElement.head();
+		return queueList.get(size()).head();
 	}
 
 	public int size() {
-		return queueList.size();
+		return queueList.size() - 1;
 	}
 }
