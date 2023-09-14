@@ -2,16 +2,17 @@ package queue;
 
 public class LoadedQueue extends Queue {
 	
-	public Queue add (Object cargo) {
-		this.queueList.add(cargo);
-		return this;
+	private Object cargo;
+
+	public LoadedQueue (Object cargo) {
+		this.cargo = cargo;
 	}
 	
 	public Object take() {
-		return null;
+		return this.cargo;
 	}
 	
 	public Object head() {
-		return null;
+		return this.cargo;
 	}
 }
