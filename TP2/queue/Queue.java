@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Queue {
 	
-	public ArrayList<QueueCommander> queueList = new ArrayList<QueueCommander>();
+	public ArrayList<QueueCommander> queueList = new ArrayList<>();
     
 	public Queue() {
 		queueList.add(new EmptyQueue());
@@ -15,17 +15,16 @@ public class Queue {
 	}
 
 	public Queue add( Object  cargo ) {
-		QueueCommander loadedQueue = new LoadedQueue(cargo);
-		queueList.add(1,loadedQueue);
+		queueList.add(1,new LoadedQueue(cargo));
 		return this;
 	}
 	
 	public Object take() {
-		return queueList.remove(size()).take();
+		return queueList.remove(size()).test();
 	}
 
 	public Object head() {
-		return queueList.get(size()).head();
+		return queueList.get(size()).test();
 	}
 
 	public int size() {
