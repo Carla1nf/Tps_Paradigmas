@@ -4,7 +4,7 @@ public class EmptyQueue extends QueueCommander {
 	
 	private static String QUEUE_IS_EMPTY = "Queue is empty";
 	
-	public Object test() {
+	public Object getCargo() {
 		throw new Error(QUEUE_IS_EMPTY);
 	}
 	

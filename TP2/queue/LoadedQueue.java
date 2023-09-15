@@ -8,7 +8,7 @@ public class LoadedQueue extends QueueCommander {
 		this.cargo = cargo;
 	}
 	
-	public Object test() {
+	public Object getCargo() {
 		return this.cargo;
 	}
 }

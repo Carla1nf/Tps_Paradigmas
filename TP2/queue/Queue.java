@@ -20,11 +20,11 @@ public class Queue {
 	}
 	
 	public Object take() {
-		return queueList.remove(size()).test();
+		return queueList.remove(size()).getCargo();
 	}
 
 	public Object head() {
-		return queueList.get(size()).test();
+		return queueList.get(size()).getCargo();
 	}
 
 	public int size() {
