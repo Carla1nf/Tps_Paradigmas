@@ -7,5 +7,8 @@ public class EmptyQueue extends QueueCommander {
 	public Object getCargo() {
 		throw new Error(QUEUE_IS_EMPTY);
 	}
+	public Boolean isEmpty() {
+		return true;
+	}
 	
 }

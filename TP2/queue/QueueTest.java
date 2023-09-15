@@ -8,20 +8,22 @@ import org.junit.jupiter.api.Test;
 
 public class QueueTest {
 
-  @Test public void test01QueueShouldBeEmptyWhenCreated() {
+  private static String SOMETHING = "Something";
+
+@Test public void test01QueueShouldBeEmptyWhenCreated() {
     assertTrue( new Queue().isEmpty() );
   }
 
   @Test public void test02AddElementsToTheQueue() {
-    assertFalse( new Queue().add( "Something" ).isEmpty() );
+    assertFalse( queueWithSomething().isEmpty() );
   }
 
   @Test public void test03AddedElementsIsAtHead() {
-    assertEquals( "Something", new Queue().add( "Something" ).head() );
+    assertEquals( SOMETHING, queueWithSomething().head() );
   }
 
   @Test public void test04TakeRemovesElementsFromTheQueue() {
-    Queue queue = new Queue().add( "Something" );
+    Queue queue = queueWithSomething();
     queue.take();
     
     assertTrue( queue.isEmpty() );
@@ -29,7 +31,7 @@ public class QueueTest {
 
   @Test public void test05TakeReturnsLastAddedObject() {
     Queue queue = new Queue();
-    String addedObject = "Something";
+    String addedObject = SOMETHING;
     queue.add( addedObject );
     
     assertEquals( addedObject, queue.take() );
@@ -60,7 +62,7 @@ public class QueueTest {
 
   @Test public void test08HeadDoesNotRemoveObjectFromQueue() {
     Queue queue = new Queue();
-    queue.add( "Something" );
+    queue.add( SOMETHING );
     assertEquals( 1, queue.size() );
     queue.head();
     assertEquals( 1, queue.size() );
@@ -77,7 +79,7 @@ public class QueueTest {
 
   @Test public void test09CanNotTakeWhenThereAreNoObjectsInTheQueueAndTheQueueHadObjects() {
     Queue queue = new Queue();
-    queue.add( "Something" );
+    queue.add( SOMETHING );
     queue.take();
     Error e = assertThrows(Error.class,() -> queue.take());
     assertTrue( e.getMessage().equals( "Queue is empty" ) );
@@ -87,4 +89,7 @@ public class QueueTest {
     Error e = assertThrows(Error.class,() -> new Queue().head());
     assertTrue( e.getMessage().equals( "Queue is empty" ) );
   }
+  private Queue queueWithSomething() {
+		return new Queue().add( SOMETHING );
+	}
 }

@@ -11,4 +11,7 @@ public class LoadedQueue extends QueueCommander {
 	public Object getCargo() {
 		return this.cargo;
 	}
+	public Boolean isEmpty() {
+		return false;
+	}
 }

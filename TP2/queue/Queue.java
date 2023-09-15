@@ -11,7 +11,7 @@ public class Queue {
 	}
 	
 	public boolean isEmpty() {
-		return queueList.size() == 1;
+		return queueList.get(size()).isEmpty();
 	}
 
 	public Queue add( Object  cargo ) {
