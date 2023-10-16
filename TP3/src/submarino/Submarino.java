@@ -2,25 +2,26 @@ package submarino;
 
 import java.lang.Math;
 public class Submarino {
+    public int profundidad;
+    public Direccionalidad direccion;
+    public Coord coord;
 
-    public int posicionX;
-    public int posicionY;
-    public int posicionZ;
-    public double direccion;
-    public Submarino() {
-        posicionX = 0;
-        posicionY = 0;
-        posicionZ = 0;
-        direccion = 0;
+    public Submarino(Direccionalidad direccion, Coord coord) {
+        this.direccion = direccion;
+        this.coord = coord;
+        this.profundidad = 0;
     }
 
     public boolean estaEnLaSuperficie() {
-        return posicionZ == 0;
+        return profundidad == 0;
     }
 
     public void comando(String accion){
-        if (accion == "r" || accion == "l"){
-            girar(accion);
+        if (accion == "r"){
+            direccion = direccion.girarR();
+        }
+        if (accion == "l"){
+            direccion = direccion.girarL();
         }
         if (accion == "u"){
             ascender();
@@ -29,38 +30,24 @@ public class Submarino {
             descender();
         }
         if (accion == "f"){
-            avanzar();
+            coord = direccion.avanzar(coord);
         }
         if (accion == "m"){
             liberarCapsula();
         }
     }
     public void ascender() {
-        if (posicionZ < 0){
-        posicionZ += 1;
+        if (profundidad < 0){
+            profundidad += 1;
         }
     }
 
     public void descender() {
-        posicionZ -= 1;
-    }
-
-    public void girar(String sentido) {
-        if (sentido == "r") {
-            direccion -= Math.PI/2;
-        }
-        else{
-            direccion += Math.PI/2;
-        }
-    }
-
-    public void avanzar() {
-        posicionX += Math.cos(direccion);
-        posicionY += Math.sin(direccion);
+        profundidad -= 1;
     }
 
     public void liberarCapsula() {
-        if(posicionZ < -1){
+        if(profundidad < -1){
             throw new UnsupportedOperationException( "Se destruyó el submarino por exceso de chocolate" );
         }
     }

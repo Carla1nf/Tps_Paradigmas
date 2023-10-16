@@ -8,53 +8,50 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class SubmarinoTest {
-    @BeforeEach public void setUp() {}
+    private Direccionalidad norte;
+    private Submarino submarino;
+    private Coord inicio;
+
+    @BeforeEach public void setUp() {
+        norte = new DireccionN();
+        inicio = new Coord(0,0);
+        submarino = new Submarino(norte,inicio);
+    }
 
     @Test public void test00NewSubmarinoCondicionesIniciales(){
-        Submarino submarino = new Submarino();
-        initialConditions(submarino);
-        assertEquals( submarino.direccion, 0);
+        assertEquals(new Coord(0,0), submarino.coord);
     }
     @Test public void test01GirarSinMoverse(){
-        Submarino submarino = new Submarino();
+        assertEquals( submarino.direccion, norte);
         submarino.comando("l");
-        initialConditions(submarino);
-        assertEquals( Math.PI/2, submarino.direccion);
+        assertEquals( submarino.direccion, new DireccionO());
         submarino.comando("r");
-        initialConditions(submarino);
-        assertEquals(  0,submarino.direccion);
+        assertEquals( submarino.direccion, norte);
     }
 
     @Test public void test02Descender(){
-        Submarino submarino = new Submarino();
         submarino.comando("d");
-        assertEquals( submarino.posicionZ, -1);
+        assertEquals( submarino.profundidad, -1);
     }
 
     @Test public void test03Ascender(){
-        Submarino submarino = new Submarino();
         submarino.comando("d");
         submarino.comando("u");
-        assertEquals( submarino.posicionZ, 0);
+        assertEquals( submarino.profundidad, 0);
     }
 
     @Test public void test04Avanzar(){
-        Submarino submarino = new Submarino();
         submarino.comando("f");
-        assertEquals( submarino.posicionX, 1);
-        assertEquals( submarino.posicionY, 0);
+        assertEquals( new Coord(0,1),submarino.coord);
     }
 
     @Test public void test05GirarYAvanzar(){
-        Submarino submarino = new Submarino();
         submarino.comando("l");
         submarino.comando("f");
-        assertEquals( submarino.posicionX, 0);
-        assertEquals( submarino.posicionY, 1);
+        assertEquals( new Coord(-1,0),submarino.coord);
     }
 
     @Test public void test06VariasAcciones(){
-        Submarino submarino = new Submarino();
         submarino.comando("f");
         submarino.comando("l");
         submarino.comando("f");
@@ -66,33 +63,20 @@ public class SubmarinoTest {
         submarino.comando("f");
         submarino.comando("f");
         submarino.comando("d");
-        assertEquals( submarino.posicionX, -2);
-        assertEquals( submarino.posicionY, 1);
-        assertEquals( submarino.posicionZ, -1);
+        assertEquals( new Coord(-1,-2),submarino.coord);
+        assertEquals( submarino.profundidad, -1);
     }
 
     @Test public void test07AscenderDesdeLaSuperficie(){
-        Submarino submarino = new Submarino();
-        assertEquals( submarino.posicionZ,0);
+        assertEquals( submarino.profundidad,0);
         submarino.ascender();
-        assertEquals( submarino.posicionZ,0);
+        assertEquals( submarino.profundidad,0);
     }
 
     @Test public void test08LiberarLaCapsulaEnProfundidad(){
-        Submarino submarino = new Submarino();
         submarino.comando("d");
         submarino.comando("d");
         Exception e = assertThrows( RuntimeException.class, () -> submarino.comando("m") );
         assertEquals( "Se destruyó el submarino por exceso de chocolate", e.getMessage() );
     }
-
-
-    private static void initialConditions(Submarino submarino) {
-        assertTrue( submarino.estaEnLaSuperficie());
-        assertEquals( submarino.posicionX, 0);
-        assertEquals( submarino.posicionY, 0);
-        assertEquals( submarino.posicionZ, 0);
-    }
-
-
 }
