@@ -1,55 +1,30 @@
 package submarino;
 
-import java.lang.Math;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Submarino {
-    public int profundidad;
+    private final Map<Character, Runnable> comandos = new HashMap<>();
+    public Profundidad profundidad;
     public Direccionalidad direccion;
     public Coord coord;
 
-    public Submarino(Direccionalidad direccion, Coord coord) {
+    public Submarino(Direccionalidad direccion, Coord coord, Profundidad profundidad) {
         this.direccion = direccion;
         this.coord = coord;
-        this.profundidad = 0;
+        this.profundidad = profundidad;
+        controladorComandos();
     }
 
-    public boolean estaEnLaSuperficie() {
-        return profundidad == 0;
+    public void controladorComandos() {
+        comandos.put('r', () -> direccion = direccion.girarR());
+        comandos.put('l', () -> direccion = direccion.girarL());
+        comandos.put('u', () -> profundidad = profundidad.ascender());
+        comandos.put('d', () -> profundidad = profundidad.descender());
+        comandos.put('f', () -> coord = direccion.avanzar(coord));
+        comandos.put('m', () -> profundidad.liberarCapsula());
     }
-
-    public void comando(String accion){
-        if (accion == "r"){
-            direccion = direccion.girarR();
-        }
-        if (accion == "l"){
-            direccion = direccion.girarL();
-        }
-        if (accion == "u"){
-            ascender();
-        }
-        if (accion == "d"){
-            descender();
-        }
-        if (accion == "f"){
-            coord = direccion.avanzar(coord);
-        }
-        if (accion == "m"){
-            liberarCapsula();
-        }
+    public void ejecutarComandos(String comands) {
+        comands.chars().forEach(each -> comandos.get((char) each).run());
     }
-    public void ascender() {
-        if (profundidad < 0){
-            profundidad += 1;
-        }
-    }
-
-    public void descender() {
-        profundidad -= 1;
-    }
-
-    public void liberarCapsula() {
-        if(profundidad < -1){
-            throw new UnsupportedOperationException( "Se destruyó el submarino por exceso de chocolate" );
-        }
-    }
-
 }
