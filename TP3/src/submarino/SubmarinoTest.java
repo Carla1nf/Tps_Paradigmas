@@ -116,6 +116,10 @@ public class SubmarinoTest {
          ejecutarComandos("dm"); // Primer Nivel
     }
 
+    @Test public void test16BajarSubirYLiberarConExito(){
+        ejecutarComandos("ddduuum");
+    }
+
 
 
 
