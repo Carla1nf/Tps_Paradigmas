@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
 public class SubmarinoTest {
     private Direccionalidad norte;
     private Submarino submarino;
@@ -71,6 +72,7 @@ public class SubmarinoTest {
         assertEquals( submarino.profundidad.getZ(),0);
     }
 
+
     @Test public void test10DescencerProfundo(){
         submarino.ejecutarComandos("ddddd");
         assertEquals( submarino.profundidad.getZ(), -5);
@@ -88,4 +90,28 @@ public class SubmarinoTest {
         Exception e = assertThrows( RuntimeException.class, () -> submarino.ejecutarComandos("m") );
         assertEquals( "Se destruyó el submarino por exceso de chocolate", e.getMessage() );
     }
+
+    @Test public void test13InsistirConEmerger(){
+        submarino.ejecutarComandos("uuuuuuuuu");
+        assertEquals( submarino.profundidad.getZ(),0);
+    }
+
+   @Test public void test14IntentarLiberarAMayorProfundidad(){
+       try {
+           submarino.ejecutarComandos("dddddm");
+           assertEquals(true, false); // Revertirlo en caso que el comando anterior pase.
+       } catch (Exception e) {
+           assertEquals(e.getMessage(), "Se destruyó el submarino por exceso de chocolate");
+       }
+    }
+     @Test public void test15LiberarEnZonaSegura(){
+        submarino.ejecutarComandos("m"); // Superficie
+        submarino.ejecutarComandos("dm"); // Primer Nivel
+    }
+
+    
+
+
+
+
 }
