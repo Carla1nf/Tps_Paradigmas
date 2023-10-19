@@ -98,7 +98,7 @@ public class SubmarinoTest {
 
     @Test public void test12LiberarLaCapsulaEnProfundidad(){
         ejecutarComandos("dd");
-        Exception e = assertThrows( RuntimeException.class, () -> submarino.ejecutarComandos("m") );
+        Exception e = assertThrows( RuntimeException.class, () -> ejecutarComandos("m") );
         assertEquals( "Se destruyó el submarino por exceso de chocolate", e.getMessage() );
     }
 
@@ -108,12 +108,8 @@ public class SubmarinoTest {
     }
 
    @Test public void test14IntentarLiberarAMayorProfundidad(){
-       try {
-           ejecutarComandos("dddddm");
-           assertEquals(true, false); // Revertirlo en caso que el comando anterior pase.
-       } catch (Exception e) {
-           assertEquals(e.getMessage(), "Se destruyó el submarino por exceso de chocolate");
-       }
+       Exception e = assertThrows( RuntimeException.class, () -> ejecutarComandos("ddddddddm") );
+       assertEquals( "Se destruyó el submarino por exceso de chocolate", e.getMessage() );
     }
      @Test public void test15LiberarEnZonaSeguraSinErrores(){
          ejecutarComandos("m"); // Superficie
