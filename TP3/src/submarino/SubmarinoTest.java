@@ -17,99 +17,110 @@ public class SubmarinoTest {
         submarino = new Submarino(norte, new Coord(0,0), new ProfundidadSuperficie());
     }
 
+    private void ejecutarComandos(String comand) {
+        submarino.ejecutarComandos(comand);
+    }
+    private int getSubmarineZ() {
+        return submarino.profundidad.getZ();
+    }
+
+
     @Test public void test00NewSubmarinoCondicionesIniciales(){
         assertEquals(new Coord(0,0), submarino.coord);
     }
     @Test public void test01GirarSinMoverse(){
         assertEquals( submarino.direccion, norte);
-        submarino.ejecutarComandos("l");
+        ejecutarComandos("l");
         assertEquals( submarino.direccion, new DireccionO());
-        submarino.ejecutarComandos("r");
+        ejecutarComandos("r");
         assertEquals( submarino.direccion, norte);
     }
 
     @Test public void test02Descender(){
-        submarino.ejecutarComandos("d");
-        assertEquals( submarino.profundidad.getZ(), -1);
+        ejecutarComandos("d");
+        assertEquals(getSubmarineZ(), -1);
     }
 
     @Test public void test03Ascender(){
-        submarino.ejecutarComandos("du");
-        assertEquals( submarino.profundidad.getZ(), 0);
+        ejecutarComandos("du");
+        assertEquals(getSubmarineZ(), 0);
     }
 
     @Test public void test04Avanzar(){
-        submarino.ejecutarComandos("f");
+        ejecutarComandos("f");
         assertEquals( new Coord(0,1),submarino.coord);
     }
 
     @Test public void test05AvanzarYDescender(){
-        submarino.ejecutarComandos("df");
+        ejecutarComandos("df");
         assertEquals( new Coord(0,1),submarino.coord);
-        assertEquals( submarino.profundidad.getZ(), -1);
+        assertEquals(getSubmarineZ(), -1);
     }
 
     @Test public void test06AvanzarYAscender(){
-        submarino.ejecutarComandos("duf");
+        ejecutarComandos("duf");
         assertEquals( new Coord(0,1),submarino.coord);
-        assertEquals( submarino.profundidad.getZ(), 0);
+        assertEquals(getSubmarineZ(), 0);
     }
 
     @Test public void test07GirarYAvanzar(){
-        submarino.ejecutarComandos("lf");
+        ejecutarComandos("lf");
         assertEquals( new Coord(-1,0),submarino.coord);
     }
 
     @Test public void test08VariasAcciones(){
         submarino.ejecutarComandos("rflddlufffrrlf");
         assertEquals( new Coord(-2,1),submarino.coord);
-        assertEquals( submarino.profundidad.getZ(), -1);
+        assertEquals(getSubmarineZ(), -1);
     }
 
     @Test public void test09AscenderDesdeLaSuperficie(){
-        assertEquals( submarino.profundidad.getZ(),0);
+        assertEquals(getSubmarineZ(),0);
         submarino.ejecutarComandos("u");
-        assertEquals( submarino.profundidad.getZ(),0);
+        assertEquals(getSubmarineZ(),0);
     }
+
 
 
     @Test public void test10DescencerProfundo(){
-        submarino.ejecutarComandos("ddddd");
-        assertEquals( submarino.profundidad.getZ(), -5);
+        ejecutarComandos("ddddd");
+        assertEquals(getSubmarineZ(), -5);
     }
 
+
+
     @Test public void test11AscenderDesdeProfundidad(){
-        submarino.ejecutarComandos("ddddd");
-        assertEquals( submarino.profundidad.getZ(), -5);
-        submarino.ejecutarComandos("uuuuu");
-        assertEquals( submarino.profundidad.getZ(), 0);
+        ejecutarComandos("ddddd");
+        assertEquals(getSubmarineZ(), -5);
+        ejecutarComandos("uuuuu");
+        assertEquals(getSubmarineZ(), 0);
     }
 
     @Test public void test12LiberarLaCapsulaEnProfundidad(){
-        submarino.ejecutarComandos("dd");
+        ejecutarComandos("dd");
         Exception e = assertThrows( RuntimeException.class, () -> submarino.ejecutarComandos("m") );
         assertEquals( "Se destruyó el submarino por exceso de chocolate", e.getMessage() );
     }
 
     @Test public void test13InsistirConEmerger(){
-        submarino.ejecutarComandos("uuuuuuuuu");
-        assertEquals( submarino.profundidad.getZ(),0);
+        ejecutarComandos("uuuuuuuuu");
+        assertEquals(getSubmarineZ(),0);
     }
 
    @Test public void test14IntentarLiberarAMayorProfundidad(){
        try {
-           submarino.ejecutarComandos("dddddm");
+           ejecutarComandos("dddddm");
            assertEquals(true, false); // Revertirlo en caso que el comando anterior pase.
        } catch (Exception e) {
            assertEquals(e.getMessage(), "Se destruyó el submarino por exceso de chocolate");
        }
     }
-     @Test public void test15LiberarEnZonaSegura(){
-        submarino.ejecutarComandos("m"); // Superficie
-        submarino.ejecutarComandos("dm"); // Primer Nivel
+     @Test public void test15LiberarEnZonaSeguraSinErrores(){
+         ejecutarComandos("m"); // Superficie
+         ejecutarComandos("dm"); // Primer Nivel
     }
 
-    
+
 
 
 
