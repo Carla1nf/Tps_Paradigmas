@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
+
 public class SubmarinoTest {
     public final String EXPLODE_MESSAGE = "Se destruyó el submarino por exceso de chocolate";
     private final Direccionalidad norte =  new DireccionN();
@@ -105,6 +106,8 @@ public class SubmarinoTest {
         assertEquals(submarino.getProfundidad(), 0);
     }
 
+
+
     @Test public void test19AscenderDesdeLaSuperficie(){
         assertEquals(submarino.ejecutarComandos("u").getProfundidad(),0);
     }
@@ -112,6 +115,8 @@ public class SubmarinoTest {
     @Test public void test20DescencerProfundo(){
         assertEquals(submarino.ejecutarComandos("ddd").getProfundidad(), -3);
     }
+
+
 
     @Test public void test21AscenderDesdeProfundidad(){
         assertEquals(submarino.ejecutarComandos("ddd").getProfundidad(), -3);
@@ -133,4 +138,28 @@ public class SubmarinoTest {
         assertEquals(submarino.ejecutarComandos("rflmddlufffrrlf").getPosition(),new Coord(-2,1));
         assertEquals(submarino.getProfundidad(), -1);
     }
+
+    @Test public void test13InsistirConEmerger(){
+        ejecutarComandos("uuuuuuuuu");
+        assertEquals(getSubmarineZ(),0);
+    }
+
+   @Test public void test14IntentarLiberarAMayorProfundidad(){
+       Exception e = assertThrows( RuntimeException.class, () -> ejecutarComandos("ddddddddm") );
+       assertEquals( "Se destruyó el submarino por exceso de chocolate", e.getMessage() );
+    }
+     @Test public void test15LiberarEnZonaSeguraSinErrores(){
+         ejecutarComandos("m"); // Superficie
+         ejecutarComandos("dm"); // Primer Nivel
+    }
+
+    @Test public void test16BajarSubirYLiberarConExito(){
+        ejecutarComandos("ddduuum");
+    }
+
+
+
+
+
+
 }
