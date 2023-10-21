@@ -9,7 +9,7 @@ public class ProfundidadSuperficie extends Profundidad {
     }
 
     public Profundidad ascender() {
-        return new ProfundidadSuperficie();
+        return this;
     }
 
     public void liberarCapsula() {}

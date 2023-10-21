@@ -7,4 +7,5 @@ public abstract class Direccionalidad {
 
     public boolean equals(Object o) {
         return o instanceof Direccionalidad;
-    }}
+    }
+}
