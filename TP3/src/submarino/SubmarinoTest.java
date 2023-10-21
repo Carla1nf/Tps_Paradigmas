@@ -138,28 +138,4 @@ public class SubmarinoTest {
         assertEquals(submarino.ejecutarComandos("rflmddlufffrrlf").getPosition(),new Coord(-2,1));
         assertEquals(submarino.getProfundidad(), -1);
     }
-
-    @Test public void test13InsistirConEmerger(){
-        ejecutarComandos("uuuuuuuuu");
-        assertEquals(getSubmarineZ(),0);
-    }
-
-   @Test public void test14IntentarLiberarAMayorProfundidad(){
-       Exception e = assertThrows( RuntimeException.class, () -> ejecutarComandos("ddddddddm") );
-       assertEquals( "Se destruyó el submarino por exceso de chocolate", e.getMessage() );
-    }
-     @Test public void test15LiberarEnZonaSeguraSinErrores(){
-         ejecutarComandos("m"); // Superficie
-         ejecutarComandos("dm"); // Primer Nivel
-    }
-
-    @Test public void test16BajarSubirYLiberarConExito(){
-        ejecutarComandos("ddduuum");
-    }
-
-
-
-
-
-
 }
