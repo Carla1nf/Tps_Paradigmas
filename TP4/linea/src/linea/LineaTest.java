@@ -37,7 +37,7 @@ public class LineaTest {
         Linea game = new Linea(2,2,'C');
         game.playRedkAt(0);
         game.playBlueAt(0);
-        assertThrows(RuntimeException.class, () -> game.playRedkAt(0));
+        assertEquals(Linea.COLUMNA_LLENA,assertThrows(RuntimeException.class, () -> game.playRedkAt(0)).getMessage());
     }
 
     @Test public void test06JuegoTerminadoConTableroLleno(){
@@ -48,20 +48,20 @@ public class LineaTest {
 
     @Test public void test07AzulNoPuedeComenzar(){
         Linea game = new Linea(1,1,'C');
-        assertThrows(RuntimeException.class, () -> game.playBlueAt(0));
+        assertEquals(Linea.TURNO_ROJAS,assertThrows(RuntimeException.class, () -> game.playBlueAt(0)).getMessage());
     }
 
     @Test public void test08RojoNoPuedeJugarDosVecesSeguidas(){
         Linea game = new Linea(2,2,'C');
         game.playRedkAt(0);
-        assertThrows(RuntimeException.class, () -> game.playRedkAt(0));
+        assertEquals(Linea.TURNO_AZULES,assertThrows(RuntimeException.class, () -> game.playRedkAt(1)).getMessage());
     }
 
     @Test public void test09AzulNoPuedeJugarDosVecesSeguidas(){
         Linea game = new Linea(2,2,'C');
         game.playRedkAt(0);
         game.playBlueAt(1);
-        assertThrows(RuntimeException.class, () -> game.playBlueAt(0));
+        assertEquals(Linea.TURNO_ROJAS,assertThrows(RuntimeException.class, () -> game.playBlueAt(0)).getMessage());
     }
     @Test public void test10VictoriaRojoHorizontalEnA(){
         Linea game = new Linea(4,4,'A');
@@ -212,5 +212,12 @@ public class LineaTest {
         game.playBlueAt(0);
         game.playRedkAt(3);
         assertFalse(game.finished());
+    }
+
+    @Test public void test21NoPuedoPonerFichaDespuesDeTerminado(){
+        Linea game = new Linea(1,1,'C');
+        game.playRedkAt(0);
+        assertTrue(game.finished());
+        assertEquals(Linea.JUEGO_TERMINADO,assertThrows(RuntimeException.class, () -> game.playBlueAt(0)).getMessage());
     }
 }

@@ -6,18 +6,22 @@ import java.util.stream.IntStream;
 
 public class Linea {
     public static final char EMPTY = '-';
-    private int base;
-    private int height;
-    private ArrayList<ArrayList<Character>> board;
-    private char redChar;
-    private char blueChar;
+    public static final String TURNO_AZULES = "Turno de azules";
+    public static final String TURNO_ROJAS = "Turno de rojas";
+    public static final String COLUMNA_LLENA = "Columna llena";
+    public static final String JUEGO_TERMINADO = "Juego terminado";
+    private final int base;
+    private final int height;
+    private final ArrayList<ArrayList<Character>> board;
+    private final char redChar;
+    private final char blueChar;
     private boolean finished;
     private Turno turno;
     private Estrategia estrategia;
-    private ArrayList<Estrategia> estrategias = new ArrayList<>(Arrays.asList(new EstrategiaA(), new EstrategiaB(), new EstrategiaC()));
+    private final ArrayList<Estrategia> estrategias = new ArrayList<>(Arrays.asList(new EstrategiaA(), new EstrategiaB(), new EstrategiaC()));
     public Linea(int base, int height, char varianteTriunfo) {
-        this.base = base;
-        this.height = height;
+        this.base = base < 0 ? 8 : base;
+        this.height = height < 0 ? 8 : height;
         this.redChar = 'X';
         this.blueChar = 'O';
         this.board = new ArrayList<>();
@@ -52,43 +56,57 @@ public class Linea {
     }
 
     public void playRedkAt(int position) {
-        if (turno instanceof TurnoAzul){
-            throw new RuntimeException("Turno de azules");
+        turno = turno.turnoRojo();
+        if (finished()){
+            throw new RuntimeException(JUEGO_TERMINADO);
         }
+        if (!finished()){
         int row = rowColumnCheck(position);
         this.board.get(row).set(position, this.redChar);
-        turno = turno.alternarTurno();
         finished = estrategia.checkWin(this, this.redChar);
+        }
+        else{System.out.println("Ganó " + turno.getClass().getSimpleName() + "!");}
+
     }
 
     public void playBlueAt(int position) {
-        if( turno instanceof TurnoRojas){
-            throw new RuntimeException("Turno de rojas");
+        turno = turno.turnoAzul();
+        if (finished()){
+            throw new RuntimeException(JUEGO_TERMINADO);
         }
-        int row = rowColumnCheck(position);
-        this.board.get(row).set(position, this.blueChar);
-        turno = turno.alternarTurno();
-        finished = estrategia.checkWin(this, this.blueChar);
+        if (!finished()) {
+            int row = rowColumnCheck(position);
+            this.board.get(row).set(position, this.blueChar);
+            finished = estrategia.checkWin(this, this.blueChar);
+        }
+        else{
+            System.out.println("Ganó " + turno.getClass().getSimpleName() + "!");
+        }
     }
 
     public int rowColumnCheck(int position){
-        //buscar la primera fila vacia en la columna desde abajo hacia arriba
-
         return IntStream.range(0, this.height)
                 .filter(i -> this.board.get(i).get(position) == EMPTY)
                 .reduce((a, b) -> b)
-                .orElseThrow(() -> new RuntimeException("Columna llena"));
+                .orElseThrow(() -> new RuntimeException(COLUMNA_LLENA));
     }
 
     public boolean verticalWin(char color) {
         return IntStream.range(0, this.base)
-                .anyMatch(column -> IntStream.range(0, this.height)
-                        .filter(row -> this.board.get(row).get(column) == color)
-                        .count() == 4);
+                        .anyMatch(column -> IntStream.range(0, this.height - 3)
+                        .anyMatch(row -> this.board.get(row).get(column) == color &&
+                                this.board.get(row + 1).get(column) == color &&
+                                this.board.get(row + 2).get(column) == color &&
+                                this.board.get(row + 3).get(column) == color));
     }
 
     public boolean horizontalWin(char color) {
-        return board.stream().anyMatch(row -> row.stream().filter(c -> c == color).count() == 4);
+        return IntStream.range(0, this.height)
+                        .anyMatch(row -> IntStream.range(0, this.base - 3)
+                        .anyMatch(column -> this.board.get(row).get(column) == color &&
+                                this.board.get(row).get(column + 1) == color &&
+                                this.board.get(row).get(column + 2) == color &&
+                                this.board.get(row).get(column + 3) == color));
     }
 
     public boolean diagonalWin(char color) {
@@ -97,20 +115,20 @@ public class Linea {
 
     public boolean diagonalWinLeft(char color) {
         return IntStream.range(0, this.height - 3)
-                .anyMatch(i -> IntStream.range(0, this.base - 3)
-                        .anyMatch(j -> this.board.get(i).get(j) == color &&
-                                this.board.get(i + 1).get(j + 1) == color &&
-                                this.board.get(i + 2).get(j + 2) == color &&
-                                this.board.get(i + 3).get(j + 3) == color));
+                .anyMatch(row -> IntStream.range(0, this.base - 3)
+                        .anyMatch(column -> this.board.get(row).get(column) == color &&
+                                this.board.get(row + 1).get(column + 1) == color &&
+                                this.board.get(row + 2).get(column + 2) == color &&
+                                this.board.get(row + 3).get(column + 3) == color));
     }
 
     public boolean diagonalWinRight(char color) {
         return IntStream.range(0, this.height - 3)
-                .anyMatch(i -> IntStream.range(3, this.base)
-                        .anyMatch(j -> this.board.get(i).get(j) == color &&
-                                this.board.get(i + 1).get(j - 1) == color &&
-                                this.board.get(i + 2).get(j - 2) == color &&
-                                this.board.get(i + 3).get(j - 3) == color));
+                .anyMatch(row -> IntStream.range(3, this.base)
+                        .anyMatch(column -> this.board.get(row).get(column) == color &&
+                                this.board.get(row + 1).get(column - 1) == color &&
+                                this.board.get(row + 2).get(column - 2) == color &&
+                                this.board.get(row + 3).get(column - 3) == color));
     }
 
     public boolean tie() {
