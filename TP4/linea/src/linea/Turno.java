@@ -1,6 +1,6 @@
 package linea;
 
 public abstract class Turno {
-    public abstract Turno turnoRojo();
-    public abstract Turno turnoAzul();
+    public abstract Turno jugarRojo(Linea game, int columna);
+    public abstract Turno jugarAzul(Linea game, int columna);
 }

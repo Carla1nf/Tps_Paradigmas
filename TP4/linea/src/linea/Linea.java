@@ -18,6 +18,7 @@ public class Linea {
     private boolean finished;
     private Turno turno;
     private Estrategia estrategia;
+    private Juego estado;
     private final ArrayList<Estrategia> estrategias = new ArrayList<>(Arrays.asList(new EstrategiaA(), new EstrategiaB(), new EstrategiaC()));
     public Linea(int base, int height, char varianteTriunfo) {
         this.base = base < 0 ? 8 : base;
@@ -27,8 +28,17 @@ public class Linea {
         this.board = new ArrayList<>();
         this.finished = false;
         this.turno = new TurnoRojas();
+        this.estado = new JuegoEnProgreso();
         this.estrategia = setEstrategia(varianteTriunfo);
-        this.board();
+        this.setUpBoard();
+    }
+
+    public char getRedChar(){
+        return this.redChar;
+    }
+
+    public char getBlueChar(){
+        return this.blueChar;
     }
 
     public Estrategia setEstrategia(char varianteTriunfo){
@@ -38,7 +48,7 @@ public class Linea {
         return estrategia;
     }
 
-    public void board(){
+    public void setUpBoard(){
         IntStream.range(0, this.height)
                 .forEach(i -> {
                     ArrayList<Character> row = new ArrayList<>();
@@ -48,47 +58,46 @@ public class Linea {
                 });}
 
     public String show() {
-        return this.board.stream()
-                .map(row -> "|" + row.stream()
-                        .map(String::valueOf)
-                        .reduce("", String::concat) + "|\n")
-                .reduce("", String::concat);
+        StringBuilder board = new StringBuilder();
+
+        this.board
+                .forEach(row -> {
+                    board.append("|");
+                    row
+                            .forEach(board::append);
+                    board.append("|\n");
+                });
+
+        board.append(">").append(IntStream.range(1, this.base + 1)
+                .mapToObj(String::valueOf)
+                .reduce("", String::concat)).append("<\n");
+
+
+        return board.toString();
     }
 
-    public void playRedkAt(int position) {
-        turno = turno.turnoRojo();
-        if (finished()){
-            throw new RuntimeException(JUEGO_TERMINADO);
-        }
-        if (!finished()){
-        int row = rowColumnCheck(position);
-        this.board.get(row).set(position, this.redChar);
+    public void playRedkAt(int columna) {
+        estado = estado.checkFinished(this, turno);
+        turno = turno.jugarRojo(this, columna-1);
         finished = estrategia.checkWin(this, this.redChar);
-        }
-        else{System.out.println("Ganó " + turno.getClass().getSimpleName() + "!");}
-
     }
 
-    public void playBlueAt(int position) {
-        turno = turno.turnoAzul();
-        if (finished()){
-            throw new RuntimeException(JUEGO_TERMINADO);
-        }
-        if (!finished()) {
-            int row = rowColumnCheck(position);
-            this.board.get(row).set(position, this.blueChar);
-            finished = estrategia.checkWin(this, this.blueChar);
-        }
-        else{
-            System.out.println("Ganó " + turno.getClass().getSimpleName() + "!");
-        }
+    public void playBlueAt(int columna) {
+        estado = estado.checkFinished(this, turno);
+        turno = turno.jugarAzul(this, columna-1);
+        finished = estrategia.checkWin(this, this.blueChar);
     }
 
-    public int rowColumnCheck(int position){
+    public void jugar(int columna, char color){
+        int row = rowColumnCheck(columna);
+        this.board.get(row).set(columna, color);
+    }
+
+    public int rowColumnCheck(int column){
         return IntStream.range(0, this.height)
-                .filter(i -> this.board.get(i).get(position) == EMPTY)
+                .filter(row -> this.board.get(row).get(column) == EMPTY)
                 .reduce((a, b) -> b)
-                .orElseThrow(() -> new RuntimeException(COLUMNA_LLENA));
+                .orElseThrow(() -> finished() ? new RuntimeException(JUEGO_TERMINADO) : new RuntimeException(COLUMNA_LLENA));
     }
 
     public boolean verticalWin(char color) {
@@ -131,11 +140,11 @@ public class Linea {
                                 this.board.get(row + 3).get(column - 3) == color));
     }
 
-    public boolean tie() {
+    public boolean empate() {
         return board.stream().allMatch(row -> row.stream().noneMatch(c -> c == EMPTY));
     }
     public boolean finished() {
-        return finished || this.tie();
+        return finished || this.empate();
     }
 }
 
