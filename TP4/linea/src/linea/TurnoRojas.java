@@ -8,5 +8,8 @@ public class TurnoRojas extends Turno{
     public Turno jugarAzul(Linea game, int columna){
         throw new RuntimeException(Linea.TURNO_ROJAS);
     }
+    public String getTurno(){
+        return Linea.TURNO_ROJAS;
+    }
 
 }

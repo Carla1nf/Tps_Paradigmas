@@ -8,4 +8,7 @@ public class TurnoAzul extends Turno{
         game.jugar(columna,game.getBlueChar());
         return new TurnoRojas();
     }
+    public String getTurno(){
+        return Linea.TURNO_AZULES;
+    }
 }
